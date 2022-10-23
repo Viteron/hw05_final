@@ -145,8 +145,8 @@ dmypy.json
 
 .mypy_cache
 
-# папки со статикой и медиа
-static/
-yatube/posts/static/
-yatube/media/
+#CSS and bootstrap
+yatube/static
 
+#мой черновик
+yatube/z_Proba.py
