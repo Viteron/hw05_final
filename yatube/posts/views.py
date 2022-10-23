@@ -1,7 +1,4 @@
-from gc import unfreeze
-from re import template
 from django.shortcuts import get_object_or_404, render, redirect
-from requests import post
 from .models import Follow, Post, Group, User
 from django.core.paginator import Paginator
 from .forms import PostForm, CommentForm
