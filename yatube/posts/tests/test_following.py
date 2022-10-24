@@ -72,6 +72,6 @@ class FollowingTests(TestCase):
         )
         response = self.second_author.get(reverse("posts:follow_index"))
         page_object = response.context["page_obj"][0]
-        self.assertEqual(page_object, FollowingTests.post)
+        self.assertEqual(page_object, FollowingTests.post2)
         # Проверка что нет других записей
-        self.assertNotEqual(page_object, FollowingTests.post2)
+        self.assertNotEqual(page_object, FollowingTests.post)
