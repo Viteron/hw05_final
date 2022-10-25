@@ -27,10 +27,12 @@ class PostPagesTests(TestCase):
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
 
+    def tearDown(self):
+        cache.clear()
+
     def test_pages_uses_correct_template(self):
         """URL-адрес использует соответствующий шаблон."""
         # Собираем в словарь пары "имя_html_шаблона: reverse(name)"
-        cache.clear()
         templates_pages_names = {
             "posts/index.html": reverse("posts:index"),
             "posts/group_list.html": reverse(
@@ -56,7 +58,6 @@ class PostPagesTests(TestCase):
 
     def test_index_page_show_correct_context(self):
         """Шаблон index сформирован с правильным контекстом."""
-        cache.clear()
         response = self.authorized_client.get(reverse("posts:index"))
         first_object = response.context["page_obj"][0]
         self.assertEqual(first_object.author.username, "auth")

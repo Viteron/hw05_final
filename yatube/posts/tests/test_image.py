@@ -1,11 +1,17 @@
-from django.test import TestCase, Client
+from django.test import TestCase, Client, override_settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from django.core.cache import cache
+import shutil
+import tempfile
+from django.conf import settings
 
 from ..models import Group, Post, User, Comment
 
+TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
 
+
+@override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
 class ImageTests(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -33,11 +39,17 @@ class ImageTests(TestCase):
         )
 
     def setUp(self):
+        cache.clear()
         # Создаем авторизованный клиент
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
         # Создаем неавторизованный клиент
         self.guest_client = Client()
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        shutil.rmtree(TEMP_MEDIA_ROOT, ignore_errors=True)
 
     def test_home_page_image_context(self):
         """Проверка передачи картинки в контекст на главной странице"""

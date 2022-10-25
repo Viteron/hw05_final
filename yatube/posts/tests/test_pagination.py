@@ -1,7 +1,8 @@
-from django.test import TestCase, Client
+from django.test import TestCase, Client, override_settings
 from django.urls import reverse
 from itertools import islice
 from django.core.cache import cache
+
 
 from ..models import Group, Post, User
 
@@ -37,6 +38,7 @@ class PaginatorViewsTest(TestCase):
             Post.objects.bulk_create(batch, batch_size)
 
     def setUp(self):
+        cache.clear()
         # Создаем авторизованный клиент
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)

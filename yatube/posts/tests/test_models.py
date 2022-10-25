@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.core.cache import cache
 
 from ..models import Group, Post, User
 
@@ -18,6 +19,9 @@ class PostModelTest(TestCase):
             text="Тестовый пост",
         )
 
+    def tearDown(self):
+        cache.clear()
+        
     def test_models_have_correct_object_names(self):
         """Проверяем, что у моделей корректно работает __str__."""
         # Напишите проверку тут

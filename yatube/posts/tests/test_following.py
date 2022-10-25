@@ -1,5 +1,6 @@
 from django.test import Client, TestCase
 from django.urls import reverse
+from django.core.cache import cache
 
 from ..models import Group, Post, Follow, User
 
@@ -32,6 +33,7 @@ class FollowingTests(TestCase):
         )
 
     def setUp(self):
+        cache.clear()
         # Создаем авторизованный клиент
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
@@ -45,11 +47,13 @@ class FollowingTests(TestCase):
         self.second_author = Client()
         self.second_author.force_login(self.user2)
 
+    def tearDown(self):
+        cache.clear()
+
     def test_autoriz_user_following(self):
         """Проверка подписки пользователя на других"""
         count_follow = Follow.objects.count()
         tamplate_follow = "posts:profile_follow"
-        tamplate_unfollow = "posts:profile_unfollow"
         self.second_author.get(
             reverse(tamplate_follow, kwargs={"username": self.post.author})
         )
@@ -58,12 +62,18 @@ class FollowingTests(TestCase):
         self.assertEqual(Follow.objects.last().author, self.post.author)
         self.assertEqual(Follow.objects.last().user, self.user2)
         # проверяем отписку
+
+    def test_autoriz_user_unfollowing(self):
+        """Проверка отписки пользователя от автора"""
+        tamplate_unfollow = "posts:profile_unfollow"
+        count_follow = Follow.objects.count()
         self.second_author.get(
             reverse(tamplate_unfollow, kwargs={"username": self.post.author})
         )
         self.assertEqual(Follow.objects.count(), count_follow)
 
     def test_new_post_in_follow_list(self):
+        cache.clear()
         """Проверка появления новой записи в ленте подписок"""
         self.second_author.get(
             reverse(
@@ -72,6 +82,6 @@ class FollowingTests(TestCase):
         )
         response = self.second_author.get(reverse("posts:follow_index"))
         page_object = response.context["page_obj"][0]
-        self.assertEqual(page_object, FollowingTests.post2)
+        self.assertEqual(page_object, self.post)
         # Проверка что нет других записей
-        self.assertNotEqual(page_object, FollowingTests.post)
+        self.assertNotEqual(page_object, self.post2)

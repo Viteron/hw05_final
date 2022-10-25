@@ -25,6 +25,9 @@ class StaticURLTests(TestCase):
         # Создаем авторизованный клиент
         self.guest_client = Client()
 
+    def tearDown(self):
+        cache.clear()
+
     def test_cash_index_page(self):
         """Проверка работы кэша для списка постов"""
         response = self.guest_client.get(reverse("posts:index"))
