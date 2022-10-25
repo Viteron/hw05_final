@@ -22,11 +22,9 @@ class StaticURLTests(TestCase):
         )
 
     def setUp(self):
+        cache.clear()
         # Создаем авторизованный клиент
         self.guest_client = Client()
-
-    def tearDown(self):
-        cache.clear()
 
     def test_cash_index_page(self):
         """Проверка работы кэша для списка постов"""

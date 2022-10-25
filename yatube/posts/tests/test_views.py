@@ -23,12 +23,10 @@ class PostPagesTests(TestCase):
         )
 
     def setUp(self):
+        cache.clear()
         # Создаем авторизованный клиент
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
-
-    def tearDown(self):
-        cache.clear()
 
     def test_pages_uses_correct_template(self):
         """URL-адрес использует соответствующий шаблон."""

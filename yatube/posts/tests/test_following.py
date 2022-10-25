@@ -47,9 +47,6 @@ class FollowingTests(TestCase):
         self.second_author = Client()
         self.second_author.force_login(self.user2)
 
-    def tearDown(self):
-        cache.clear()
-
     def test_autoriz_user_following(self):
         """Проверка подписки пользователя на других"""
         count_follow = Follow.objects.count()

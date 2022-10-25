@@ -24,6 +24,7 @@ class StaticURLTests(TestCase):
         cls.url_create = "/create/"
 
     def setUp(self):
+        cache.clear()
         # Создаем неавторизованный клиент
         self.guest_client = Client()
         # Создаем авторизованый клиент
@@ -35,13 +36,9 @@ class StaticURLTests(TestCase):
         # Авторизуем автора
         self.author.force_login(StaticURLTests.user)
 
-    def tearDown(self):
-        cache.clear()
-
     # Проверяем общедоступные страницы
     def test_home_url_exists_at_desired_location(self):
         """Страницы доступны любому пользователю."""
-        cache.clear()
         TEMPLATE_URLS = {
             "posts/group_list.html": "/group/test-slug/",
             "posts/profile.html": "/profile/auth/",

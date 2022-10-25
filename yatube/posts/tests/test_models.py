@@ -19,9 +19,9 @@ class PostModelTest(TestCase):
             text="Тестовый пост",
         )
 
-    def tearDown(self):
+    def setUp(self):
         cache.clear()
-        
+
     def test_models_have_correct_object_names(self):
         """Проверяем, что у моделей корректно работает __str__."""
         # Напишите проверку тут
