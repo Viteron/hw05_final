@@ -157,7 +157,7 @@ class PostFormsTest(TestCase):
     def test_edit_group(self):
         """Редактирование с изменением группы"""
         group_last = Group.objects.last()
-        group_first = Group.objects.first()
+        # group_first = Group.objects.first()
         post = Post.objects.first()
         form_data = {
             "text": "Тестовый пост",
@@ -168,7 +168,7 @@ class PostFormsTest(TestCase):
         )
         # Проверяем, сработал ли редирект
         self.assertRedirects(
-            response, reverse("posts:post_detail", args=[group_first.id])
+            response, reverse("posts:post_detail", args=[group_last.id])
         )
         new_post = Post.objects.first().group.title
 
