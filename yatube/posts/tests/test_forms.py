@@ -69,6 +69,7 @@ class PostFormsTest(TestCase):
     def test_edit_post_and_check_edit_in_base(self):
         """Проверка изменений поста после валидации и изменение в БД"""
         group_first = Group.objects.first()
+        group_second = Group.objects.last()
         post = Post.objects.first()
         form_data = {
             "text": "Новый текст",
@@ -79,7 +80,7 @@ class PostFormsTest(TestCase):
         )
         # Проверяем, сработал ли редирект
         self.assertRedirects(
-            response, reverse("posts:post_detail", args=[group_first.id])
+            response, reverse("posts:post_detail", args=[group_second.id])
         )
         new_post = Post.objects.get(id=1).text
 
@@ -130,6 +131,7 @@ class PostFormsTest(TestCase):
         """Редактирование не автором
         (пост не должен изменить значения полей)"""
         group_first = Group.objects.first()
+        group_second = Group.objects.last()
         post = Post.objects.first()
         form_data = {
             "text": "Текст, которого не может быть",
@@ -144,7 +146,7 @@ class PostFormsTest(TestCase):
             "/auth/login/?next=/posts/" + str(self.post.id) + "/edit/",
         )"""
         self.assertRedirects(
-            response, reverse("posts:post_detail", args=[group_first.id])
+            response, reverse("posts:post_detail", args=[group_second.id])
         )
         # Берем 1 запись в БД
         new_post = Post.objects.get(id=1).text
@@ -166,7 +168,7 @@ class PostFormsTest(TestCase):
         )
         # Проверяем, сработал ли редирект
         self.assertRedirects(
-            response, reverse("posts:post_detail", args=[group_first.id])
+            response, reverse("posts:post_detail", args=[group_last.id])
         )
         new_post = Post.objects.first().group.title
 
