@@ -118,10 +118,12 @@ def follow_index(request):
     paginator = Paginator(post_list, POSTS_PER_PAGE)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
+    title = "Лента постов"
     context = {
         "page_obj": page_obj,
+        "title": title,
     }
-    tamplate = "posts/follow.html"
+    tamplate = "posts/group_list.html"
     return render(request, tamplate, context)
 
 
@@ -145,6 +147,5 @@ def profile_unfollow(request, username):
         user=request.user,
         author=author,
     )
-    if unfollow.exists():
-        unfollow.delete()
+    unfollow.delete()
     return redirect(template)

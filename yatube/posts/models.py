@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from core.models import CreatedModel
+from django.db.models import UniqueConstraint
 
 
 User = get_user_model()
@@ -81,5 +82,8 @@ class Follow(models.Model):
         User, on_delete=models.CASCADE, related_name="follower"
     )
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="following"
+        User,
+        on_delete=models.CASCADE,
+        related_name="following",
     )
+    UniqueConstraint(fields=["author"], name="unique_author")
