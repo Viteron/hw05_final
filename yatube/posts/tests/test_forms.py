@@ -1,4 +1,3 @@
-from tokenize import group
 from django.test import Client, TestCase
 from django.urls import reverse
 from django.core.cache import cache
@@ -131,8 +130,6 @@ class PostFormsTest(TestCase):
         """Редактирование не автором
         (пост не должен изменить значения полей)"""
         group_first = Group.objects.first()
-        group_2 = Group.objects.last()
-
         post = Post.objects.first()
         form_data = {
             "text": "Текст, которого не может быть",

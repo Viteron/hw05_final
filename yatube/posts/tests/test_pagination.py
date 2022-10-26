@@ -1,4 +1,4 @@
-from django.test import TestCase, Client, override_settings
+from django.test import TestCase, Client
 from django.urls import reverse
 from itertools import islice
 from django.core.cache import cache
