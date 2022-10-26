@@ -1,3 +1,4 @@
+from tokenize import group
 from django.test import Client, TestCase
 from django.urls import reverse
 from django.core.cache import cache
@@ -71,15 +72,18 @@ class PostFormsTest(TestCase):
         # group_first = Group.objects.first()
         # group_second = Group.objects.last()
         post = Post.objects.first()
+        group = post.group_id
         form_data = {
             "text": "Новый текст",
-            "group": 1,
+            "group": group,
         }
         response = self.authorized_client.post(
             reverse("posts:edit", args=[post.id]), data=form_data
         )
         # Проверяем, сработал ли редирект
-        self.assertRedirects(response, reverse("posts:post_detail", args=[1]))
+        self.assertRedirects(
+            response, reverse("posts:post_detail", args=[group])
+        )
         new_post = Post.objects.get(id=1).text
 
         # Проверяем, изменилась ли запись
